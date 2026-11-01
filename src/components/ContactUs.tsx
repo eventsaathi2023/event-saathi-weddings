@@ -3,37 +3,6 @@ import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Mail } from 'lucide-r
 
 export function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
-    setErrorMessage('');
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setSubmitted(true);
-        form.reset();
-      } else {
-        setErrorMessage(result.message || "Kuch problem aayi hai. Kripya WhatsApp par contact karein.");
-      }
-    } catch (error) {
-      setErrorMessage("Network error. Kripya apna internet connection check karein.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <section id="contact" className="py-20 bg-slate-900 text-white">
@@ -107,8 +76,13 @@ export function ContactUs() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Web3Forms Hidden Access Key & Configuration */}
+              <form 
+                action="https://api.web3forms.com/submit" 
+                method="POST" 
+                onSubmit={() => setSubmitted(true)}
+                className="space-y-6"
+              >
+                {/* Web3Forms Access Key & Configuration */}
                 <input type="hidden" name="access_key" value="5e526af2-cd93-448c-8cd3-adacbe864078" />
                 <input type="hidden" name="subject" value="🎉 New Lead: Event Saathi Weddings Inquiry" />
 
@@ -145,23 +119,12 @@ export function ContactUs() {
                   ></textarea>
                 </div>
 
-                {errorMessage && (
-                  <p className="text-red-400 text-sm">{errorMessage}</p>
-                )}
-
                 <button
                   type="submit"
-                  disabled={loading}
                   className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg transition-colors flex items-center justify-center space-x-2"
                 >
-                  {loading ? (
-                    <span>Submitting...</span>
-                  ) : (
-                    <>
-                      <span>Submit & Request Callback</span>
-                      <Send className="w-5 h-5" />
-                    </>
-                  )}
+                  <span>Submit & Request Callback</span>
+                  <Send className="w-5 h-5" />
                 </button>
               </form>
             )}
