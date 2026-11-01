@@ -14,9 +14,10 @@ export function ContactUs() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Web3Forms Access Key
+    // Web3Forms Access Key & Configuration
     const objectData = Object.fromEntries(formData);
-    objectData.access_key = "d1b54b17-7cd4-44b0-a3d8-5f25a58572aa"; // Public test/production key configured for Event Saathi
+    objectData.access_key = "5e526af2-cd93-448c-8cd3-adacbe864078"; // Updated Web3Forms access key
+    objectData.subject = "🎉 New Lead: Event Saathi Weddings Inquiry"; // Custom email subject
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
