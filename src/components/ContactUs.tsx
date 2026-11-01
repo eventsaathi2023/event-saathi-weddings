@@ -13,20 +13,11 @@ export function ContactUs() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    
-    // Web3Forms Access Key & Configuration
-    const objectData = Object.fromEntries(formData);
-    objectData.access_key = "5e526af2-cd93-448c-8cd3-adacbe864078"; // Updated Web3Forms access key
-    objectData.subject = "🎉 New Lead: Event Saathi Weddings Inquiry"; // Custom email subject
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(objectData),
+        body: formData,
       });
 
       const result = await response.json();
@@ -117,6 +108,10 @@ export function ContactUs() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Web3Forms Hidden Access Key & Configuration */}
+                <input type="hidden" name="access_key" value="5e526af2-cd93-448c-8cd3-adacbe864078" />
+                <input type="hidden" name="subject" value="🎉 New Lead: Event Saathi Weddings Inquiry" />
+
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-2">Your Name</label>
                   <input
