@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { COMPANY_DETAILS, SERVICES_LIST } from '../data/content';
-import { X, Calendar, Phone, MessageCircle, CheckCircle, Sparkles, Send } from 'lucide-react';
+import { X, CheckCircle, Sparkles, Send } from 'lucide-react';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -22,14 +23,51 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [eventDate, setEventDate] = useState('');
   const [guests, setGuests] = useState('300 - 500 Guests');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   if (!isOpen) return null;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const formData = new FormData(form);
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitted(true);
+      } else {
+        setError(
+          result.message || 'Unable to submit your booking request. Please try again.'
+        );
+      }
+    } catch (err) {
+      setError(
+        'Network error. Please check your internet connection and try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
       <div className="bg-[#0f141d] border border-[#d4af37]/40 rounded-xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl space-y-5">
+
         {/* Close Button */}
         <button
+          type="button"
           onClick={onClose}
           className="cursor-pointer absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-colors"
           aria-label="Close booking modal"
@@ -42,16 +80,33 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             <div className="w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
               <CheckCircle className="w-8 h-8" />
             </div>
+
             <h3 className="font-cinzel text-xl font-bold text-white">
               Consultation Slot Requested Successfully!
             </h3>
+
             <p className="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
-              Thank you, <strong className="text-white">{name}</strong>. Your consultation details have been sent automatically to Event Saathi Weddings. Our senior event planner from L.C. Road, Dhanbad will contact you on <strong className="text-white">{phone}</strong> shortly.
+              Thank you, <strong className="text-white">{name}</strong>.
+              Your consultation details have been successfully submitted to
+              Event Saathi Weddings. Our event planning team will contact you
+              on <strong className="text-white">{phone}</strong> shortly.
             </p>
+
             <div className="pt-2 flex flex-col gap-2.5">
               <button
+                type="button"
                 onClick={() => {
                   setSubmitted(false);
+                  setName('');
+                  setPhone('');
+                  setEmail('');
+                  setEventDate('');
+                  setGuests('300 - 500 Guests');
+                  setService(
+                    selectedServiceTitle ||
+                    'Full Wedding Planning & Royal Decoration'
+                  );
+                  setError('');
                   onClose();
                 }}
                 className="cursor-pointer py-2.5 px-4 text-xs font-semibold text-[#0a0e14] bg-gradient-to-r from-[#f3e5ab] via-[#d4af37] to-[#c59b27] hover:brightness-110 rounded-md transition-all"
@@ -67,24 +122,44 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Event Saathi Weddings · Dhanbad</span>
               </div>
+
               <h3 className="font-cinzel text-xl sm:text-2xl font-bold text-white mt-1">
                 Book Free Consultation
               </h3>
+
               <p className="text-xs text-slate-300 mt-1">
                 Meet our expert event directors at LC Road, Dhanbad or schedule a call.
               </p>
             </div>
 
             <form
-              action="https://formspree.io/f/xpppyrov"
-              method="POST"
-              onSubmit={() => setSubmitted(true)}
+              onSubmit={handleSubmit}
               className="space-y-3.5"
             >
+              {/* Web3Forms Configuration */}
+              <input
+                type="hidden"
+                name="access_key"
+                value="8a43b9e0-6462-4aa9-8b20-66f68bc90045"
+              />
+
+              <input
+                type="hidden"
+                name="subject"
+                value="New Booking Enquiry: Event Saathi Weddings"
+              />
+
+              <input
+                type="hidden"
+                name="from_name"
+                value="Event Saathi Weddings Website"
+              />
+
               <div>
                 <label className="text-xs font-medium text-slate-300 block mb-1">
                   Full Name *
                 </label>
+
                 <input
                   type="text"
                   name="name"
@@ -101,6 +176,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   <label className="text-xs font-medium text-slate-300 block mb-1">
                     Mobile / WhatsApp *
                   </label>
+
                   <input
                     type="tel"
                     name="phone"
@@ -111,10 +187,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     className="w-full px-3.5 py-2.5 bg-[#0a0e14] border border-slate-700 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
+
                 <div>
                   <label className="text-xs font-medium text-slate-300 block mb-1">
                     Email Address (Optional)
                   </label>
+
                   <input
                     type="email"
                     name="email"
@@ -130,6 +208,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <label className="text-xs font-medium text-slate-300 block mb-1">
                   Select Event Specialization
                 </label>
+
                 <select
                   name="service"
                   value={service}
@@ -149,6 +228,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   <label className="text-xs font-medium text-slate-300 block mb-1">
                     Tentative Date
                   </label>
+
                   <input
                     type="date"
                     name="eventDate"
@@ -157,10 +237,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     className="w-full px-3 py-2 bg-[#0a0e14] border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-[#d4af37]"
                   />
                 </div>
+
                 <div>
                   <label className="text-xs font-medium text-slate-300 block mb-1">
                     Guest Count
                   </label>
+
                   <select
                     name="guests"
                     value={guests}
@@ -176,20 +258,34 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </div>
               </div>
 
+              {error && (
+                <p className="text-red-400 text-xs" role="alert">
+                  {error}
+                </p>
+              )}
+
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full cursor-pointer py-3 px-4 text-xs font-semibold uppercase tracking-wider text-[#0a0e14] bg-gradient-to-r from-[#f3e5ab] via-[#d4af37] to-[#c59b27] hover:brightness-110 rounded-md transition-all shadow-lg flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full cursor-pointer py-3 px-4 text-xs font-semibold uppercase tracking-wider text-[#0a0e14] bg-gradient-to-r from-[#f3e5ab] via-[#d4af37] to-[#c59b27] hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed rounded-md transition-all shadow-lg flex items-center justify-center gap-2"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>Confirm Consultation Request</span>
+                  <span>
+                    {isSubmitting
+                      ? 'Sending Request...'
+                      : 'Confirm Consultation Request'}
+                  </span>
                 </button>
               </div>
 
               <div className="text-center pt-1">
                 <span className="text-[11px] text-slate-400">
                   Prefer direct phone discussion?{' '}
-                  <a href={`tel:${COMPANY_DETAILS.phoneClean}`} className="text-[#d4af37] hover:underline">
+                  <a
+                    href={`tel:${COMPANY_DETAILS.phoneClean}`}
+                    className="text-[#d4af37] hover:underline"
+                  >
                     Call {COMPANY_DETAILS.phone}
                   </a>
                 </span>

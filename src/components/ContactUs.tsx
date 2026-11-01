@@ -1,8 +1,41 @@
+
 import React, { useState } from 'react';
 import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Mail } from 'lucide-react';
 
 export function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    setIsSubmitting(true);
+    setError('');
+
+    try {
+      const formData = new FormData(form);
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        form.reset();
+        setSubmitted(true);
+      } else {
+        setError(result.message || 'Unable to send your request. Please try again.');
+      }
+    } catch (err) {
+      setError('Network error. Please check your internet connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="py-20 bg-slate-900 text-white">
@@ -20,14 +53,21 @@ export function ContactUs() {
           {/* Contact Information */}
           <div className="space-y-8">
             <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl">
-              <h3 className="text-2xl font-bold text-amber-400 mb-6">Contact Information</h3>
-              
+              <h3 className="text-2xl font-bold text-amber-400 mb-6">
+                Contact Information
+              </h3>
+
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
                   <Phone className="w-6 h-6 text-amber-400 mt-1 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-slate-400">Phone / WhatsApp</p>
-                    <a href="https://wa.me/918757583010" target="_blank" rel="noopener noreferrer" className="text-lg font-medium hover:text-amber-400 transition-colors">
+                    <a
+                      href="https://wa.me/918757583010"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-lg font-medium hover:text-amber-400 transition-colors"
+                    >
                       +91 8757583010
                     </a>
                   </div>
@@ -37,7 +77,9 @@ export function ContactUs() {
                   <MapPin className="w-6 h-6 text-amber-400 mt-1 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-slate-400">Operating Regions</p>
-                    <p className="text-lg font-medium">Dhanbad, Bokaro, Ranchi, Jamshedpur & Across India</p>
+                    <p className="text-lg font-medium">
+                      Dhanbad, Bokaro, Ranchi, Jamshedpur & Across India
+                    </p>
                   </div>
                 </div>
 
@@ -45,13 +87,14 @@ export function ContactUs() {
                   <Mail className="w-6 h-6 text-amber-400 mt-1 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-slate-400">Direct WhatsApp Chat</p>
-                    <a 
-                      href="https://wa.me/918757583010?text=Hi%20Event%20Saathi,%20I%20want%20to%20discuss%20an%20event%20booking." 
-                      target="_blank" 
+                    <a
+                      href="https://wa.me/918757583010?text=Hi%20Event%20Saathi,%20I%20want%20to%20discuss%20an%20event%20booking."
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-md"
                     >
-                      <MessageSquare className="w-4 h-4 mr-2" /> Chat on WhatsApp Now
+                      <MessageSquare className="w-4 h-4 mr-2" />
+                      Chat on WhatsApp Now
                     </a>
                   </div>
                 </div>
@@ -64,30 +107,44 @@ export function ContactUs() {
             {submitted ? (
               <div className="text-center py-12 space-y-4">
                 <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto animate-bounce" />
-                <h3 className="text-2xl font-bold text-white">Consultation Request Received!</h3>
+                <h3 className="text-2xl font-bold text-white">
+                  Consultation Request Received!
+                </h3>
                 <p className="text-slate-300">
                   Thank you for reaching out. Our team will get back to you shortly.
                 </p>
                 <button
-                  onClick={() => setSubmitted(false)}
+                  type="button"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setError('');
+                  }}
                   className="mt-6 px-6 py-2 bg-amber-500 text-slate-900 font-semibold rounded-lg hover:bg-amber-400 transition-colors"
                 >
                   Send Another Message
                 </button>
               </div>
             ) : (
-              <form 
-                action="https://api.web3forms.com/submit" 
-                method="POST" 
-                onSubmit={() => setSubmitted(true)}
+              <form
+                onSubmit={handleSubmit}
                 className="space-y-6"
               >
-                {/* Web3Forms Hidden Access Key & Configuration */}
-                <input type="hidden" name="access_key" value="5e526af2-cd93-448c-8cd3-adacbe864078" />
-                <input type="hidden" name="subject" value="🎉 New Lead: Event Saathi Weddings Inquiry" />
+                <input
+                  type="hidden"
+                  name="access_key"
+                  value="8a43b9e0-6462-4aa9-8b20-66f68bc90045"
+                />
+
+                <input
+                  type="hidden"
+                  name="subject"
+                  value="New Lead: Event Saathi Weddings Contact Enquiry"
+                />
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Your Name</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Your Name
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -98,7 +155,9 @@ export function ContactUs() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Phone Number
+                  </label>
                   <input
                     type="tel"
                     name="phone"
@@ -109,7 +168,9 @@ export function ContactUs() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Event Type / Message</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Event Type / Message
+                  </label>
                   <textarea
                     name="message"
                     rows={4}
@@ -119,11 +180,20 @@ export function ContactUs() {
                   ></textarea>
                 </div>
 
+                {error && (
+                  <p className="text-red-400 text-sm" role="alert">
+                    {error}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg transition-colors flex items-center justify-center space-x-2"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-amber-500 hover:bg-amber-400 disabled:opacity-60 text-slate-900 font-bold rounded-lg transition-colors flex items-center justify-center space-x-2"
                 >
-                  <span>Submit & Request Callback</span>
+                  <span>
+                    {isSubmitting ? 'Sending...' : 'Submit & Request Callback'}
+                  </span>
                   <Send className="w-5 h-5" />
                 </button>
               </form>
