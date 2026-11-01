@@ -82,7 +82,7 @@ export function ContactUs() {
                 onSubmit={() => setSubmitted(true)}
                 className="space-y-6"
               >
-                {/* Web3Forms Access Key & Configuration */}
+                {/* Web3Forms Hidden Access Key & Configuration */}
                 <input type="hidden" name="access_key" value="5e526af2-cd93-448c-8cd3-adacbe864078" />
                 <input type="hidden" name="subject" value="🎉 New Lead: Event Saathi Weddings Inquiry" />
 
