@@ -10,8 +10,6 @@ import {
   CheckCircle,
   ChevronDown,
   Sparkles,
-  Calendar,
-  Users,
 } from 'lucide-react';
 
 interface ContactUsProps {
@@ -31,35 +29,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ initialService }) => {
   });
 
   const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch('https://formspree.io/f/xpppyrov', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setSubmitted(true);
-      } else {
-        alert('Submission error. Please try sending directly via WhatsApp.');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Network error. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleSendToWhatsApp = () => {
     const text = encodeURIComponent(
@@ -173,6 +143,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ initialService }) => {
               {/* Quick WhatsApp Action Box */}
               <div className="pt-2 border-t border-slate-800">
                 <button
+                  type="button"
                   onClick={handleSendToWhatsApp}
                   className="w-full cursor-pointer py-3 text-xs font-semibold text-[#0a0e14] bg-emerald-500 hover:bg-emerald-400 rounded-md transition-colors flex items-center justify-center gap-2"
                 >
@@ -222,10 +193,11 @@ export const ContactUs: React.FC<ContactUsProps> = ({ initialService }) => {
                   Consultation Request Received!
                 </h4>
                 <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
-                  Dhanyawaad, <strong className="text-white">{formData.name}</strong>! Your event details for {formData.eventType} in {formData.venueCity} have been logged with our planning desk.
+                  Dhanyawaad, <strong className="text-white">{formData.name}</strong>! Your event details have been logged with our planning desk.
                 </p>
                 <div className="pt-2 flex flex-col sm:flex-row justify-center gap-3">
                   <button
+                    type="button"
                     onClick={handleSendToWhatsApp}
                     className="cursor-pointer px-5 py-3 text-xs font-semibold text-[#0a0e14] bg-emerald-500 hover:bg-emerald-400 rounded-md transition-all flex items-center justify-center gap-2"
                   >
@@ -233,6 +205,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ initialService }) => {
                     <span>Send Directly on WhatsApp (+91 8757583010)</span>
                   </button>
                   <button
+                    type="button"
                     onClick={() => setSubmitted(false)}
                     className="cursor-pointer px-4 py-3 text-xs font-medium text-slate-300 hover:text-white border border-slate-700 rounded-md"
                   >
@@ -241,7 +214,12 @@ export const ContactUs: React.FC<ContactUsProps> = ({ initialService }) => {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form 
+                action="https://formspree.io/f/xpppyrov" 
+                method="POST"
+                onSubmit={() => setSubmitted(true)}
+                className="space-y-4"
+              >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Name */}
                   <div>
@@ -386,11 +364,10 @@ export const ContactUs: React.FC<ContactUsProps> = ({ initialService }) => {
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={isSubmitting}
-                    className="w-full cursor-pointer py-3.5 px-4 text-xs font-semibold uppercase tracking-wider text-[#0a0e14] bg-gradient-to-r from-[#f3e5ab] via-[#d4af37] to-[#c59b27] hover:brightness-110 rounded-md transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="w-full cursor-pointer py-3.5 px-4 text-xs font-semibold uppercase tracking-wider text-[#0a0e14] bg-gradient-to-r from-[#f3e5ab] via-[#d4af37] to-[#c59b27] hover:brightness-110 rounded-md transition-all shadow-lg flex items-center justify-center gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    <span>{isSubmitting ? 'Sending...' : 'Submit & Request Callback'}</span>
+                    <span>Submit & Request Callback</span>
                   </button>
                 </div>
               </form>
@@ -418,6 +395,7 @@ export const ContactUs: React.FC<ContactUsProps> = ({ initialService }) => {
                   className="bg-[#0f141d] rounded-lg border border-slate-800 overflow-hidden"
                 >
                   <button
+                    type="button"
                     onClick={() => setActiveFaq(isOpen ? null : idx)}
                     className="w-full p-4 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-800/40 transition-colors"
                   >
