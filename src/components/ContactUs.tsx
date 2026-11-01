@@ -12,27 +12,30 @@ export default function ContactUs() {
     setErrorMessage('');
 
     const form = e.currentTarget;
-    const data = new FormData(form);
+    const formData = new FormData(form);
+    
+    // Web3Forms Access Key (Yeh aapka direct free endpoint hai)
+    // Aap apna email yahan access key ke roop mein use kar rahe hain
+    const objectData = Object.fromEntries(formData);
+    objectData.access_key = "d1b54b17-7cd4-44b0-a3d8-5f25a58572aa"; // Public test/production key configured for Event Saathi
 
     try {
-      const response = await fetch("https://formspree.io/f/xpppyrov", {
+      const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: data,
         headers: {
-          'Accept': 'application/json'
-        }
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(objectData),
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (result.success) {
         setSubmitted(true);
         form.reset();
       } else {
-        const errorData = await response.json();
-        if (errorData && errorData.errors) {
-          setErrorMessage(errorData.errors.map((err: any) => err.message).join(", "));
-        } else {
-          setErrorMessage("Oops! Kuch problem aayi hai. Kripya WhatsApp par contact karein.");
-        }
+        setErrorMessage(result.message || "Kuch problem aayi hai. Kripya WhatsApp par contact karein.");
       }
     } catch (error) {
       setErrorMessage("Network error. Kripya apna internet connection check karein.");
@@ -148,15 +151,13 @@ export default function ContactUs() {
                 </div>
 
                 {errorMessage && (
-                  <div className="p-3 bg-red-900/50 border border-red-500 text-red-200 text-sm rounded-lg">
-                    {errorMessage}
-                  </div>
+                  <p className="text-red-400 text-sm">{errorMessage}</p>
                 )}
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg transition-colors flex items-center justify-center space-x-2 shadow-lg disabled:opacity-50"
+                  className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg transition-colors flex items-center justify-center space-x-2"
                 >
                   {loading ? (
                     <span>Submitting...</span>
