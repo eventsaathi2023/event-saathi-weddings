@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle2, MessageSquare, Phone, MapPin, Mail } from 'lucide-react';
 
-export default function ContactUs() {
+export function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -14,8 +14,7 @@ export default function ContactUs() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Web3Forms Access Key (Yeh aapka direct free endpoint hai)
-    // Aap apna email yahan access key ke roop mein use kar rahe hain
+    // Web3Forms Access Key
     const objectData = Object.fromEntries(formData);
     objectData.access_key = "d1b54b17-7cd4-44b0-a3d8-5f25a58572aa"; // Public test/production key configured for Event Saathi
 
