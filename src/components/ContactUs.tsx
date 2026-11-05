@@ -31,7 +31,7 @@ export function ContactUs() {
         setError(result.message || 'Unable to send your request. Please try again.');
       }
     } catch (err) {
-      setError('Network error. Please check your internet connection and try again.');
+      setError('Network error. Please check your internet connection and try again');
     } finally {
       setIsSubmitting(false);
     }
@@ -63,12 +63,12 @@ export function ContactUs() {
                   <div>
                     <p className="text-sm text-slate-400">Phone / WhatsApp</p>
                     <a
-                      href="https://wa.me/918757583010"
+                      href="https://wa.me/918893870565"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-lg font-medium hover:text-amber-400 transition-colors"
                     >
-                      +91 8757583010
+                      +91 8893870565
                     </a>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ export function ContactUs() {
                   <div>
                     <p className="text-sm text-slate-400">Direct WhatsApp Chat</p>
                     <a
-                      href="https://wa.me/918757583010?text=Hi%20Event%20Saathi,%20I%20want%20to%20discuss%20an%20event%20booking."
+                      href="https://wa.me/918893870565?text=Hi%20Event%20Saathi,%20I%20want%20to%20discuss%20an%20event%20booking."
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center mt-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-md"

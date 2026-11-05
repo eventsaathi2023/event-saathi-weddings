@@ -1,3 +1,4 @@
+
 import { ServiceItem, GalleryImage, PortfolioProject, Testimonial, FAQItem } from '../types';
 
 import heroRoyalWeddingImg from '../assets/images/hero_royal_wedding.jpg';
@@ -19,8 +20,8 @@ export const COMPANY_DETAILS = {
   shortName: 'Event Saathi Weddings',
   establishedYear: '2025',
   headquarters: 'L.C Road, Dhanbad, Jharkhand - 826001',
-  phone: '+91 8757583010',
-  phoneClean: '918757583010',
+  phone: '+91 8893870565',
+  phoneClean: '918893870565',
   email: 'eventsaathidhanbad@gmail.com',
   workingHours: 'Mon - Sun: 9:00 AM - 9:30 PM (24/7 Event Helpline)',
   tagline: 'Aapke Har Utsav Ka Shahi Saathi',
@@ -415,7 +416,7 @@ export const FAQS: FAQItem[] = [
   {
     question: 'Aapka office kahan par sthit hai aur kya hum milne aa sakte hain?',
     answer:
-      'Humara office L.C Road, Dhanbad, Jharkhand - 826001 par sthit hai. Aap humare office Monday se Sunday subah 9:00 AM se raat 9:30 PM ke beech aa sakte hain ya +91 8757583010 par call karke ek dedicated consultation slot book kar sakte hain.',
+      'Humara office L.C Road, Dhanbad, Jharkhand - 826001 par sthit hai. Aap humare office Monday se Sunday subah 9:00 AM se raat 9:30 PM ke beech aa sakte hain ya +91 8893870565 par call karke ek dedicated consultation slot book kar sakte hain.',
     category: 'Location',
   },
   {

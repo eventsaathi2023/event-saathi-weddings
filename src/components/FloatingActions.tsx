@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { COMPANY_DETAILS } from '../data/content';
 import { Phone, MessageCircle, ArrowUp } from 'lucide-react';
@@ -45,7 +46,7 @@ export const FloatingActions: React.FC = () => {
       <a
         href={`tel:${COMPANY_DETAILS.phoneClean}`}
         className="cursor-pointer w-11 h-11 rounded-full bg-[#17120a] border border-[#d4af37]/60 text-[#d4af37] hover:scale-105 flex items-center justify-center shadow-xl transition-all"
-        title="Call Event Saathi Office: +91 8757583010"
+        title="Call Event Saathi Office: +91 8893870565"
         aria-label="Call Event Saathi"
       >
         <Phone className="w-5 h-5" />
